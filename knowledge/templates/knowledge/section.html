@@ -1,0 +1,47 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% block page %}
+    <article>
+    <h1>{{ section.section_title }}</h1>
+        <p>{{ section.section_description|safe }}</p>
+        <h2>Статьи</h2>
+        <ul>
+        {% for article in section.article_set.all|dictsort:'article_name' %}
+            {% if article.article_status %}
+            <li>
+            <a href="{% url 'news:article' section.section_url article.id %}">
+                {{ article.article_name }}
+            </a>
+            </li>
+            <li>
+                <a href="http://vk.com/share.php?url=https://hitparad.kz{{ article.get_absolute_url }}"
+                   target="_blank" rel="nofollow">
+                    {{ article.article_name }}
+                    <img src="{% static 'images/social/vk.png' %}">
+                </a>
+                <a href="https://twitter.com/share?url=https://hitparad.kz{{ article.get_absolute_url }}"
+                   target="_blank" rel="nofollow">
+                    {{ article.article_name }}
+                    <img src="{% static 'images/social/twitter.png' %}">
+                </a>
+                <a href="https://www.facebook.com/sharer/sharer.php?u=https://hitparad.kz{{ article.get_absolute_url }}"
+                   target="_blank" rel="nofollow">
+                    {{ article.article_name }}
+                    <img src="{% static 'images/social/facebook.png' %}">
+                </a>
+                <a href="https://plus.google.com/share?url=https://hitparad.kz{{ article.get_absolute_url }}"
+                   target="_blank" rel="nofollow">
+                    {{ article.article_name }}
+                    <img src="{% static 'images/social/google-plus.png' %}">
+                </a>
+                <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://hitparad.kz{{ article.get_absolute_url }}"
+                   target="_blank" rel="nofollow">
+                    {{ article.article_name }}
+                    <img src="{% static 'images/social/linkedin.png' %}">
+                </a>
+            </li>
+            {% endif %}
+        {% endfor %}
+        </ul>
+    </article>
+{% endblock %} 

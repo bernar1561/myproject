@@ -1,0 +1,20 @@
+{% extends 'home/base.html' %}{% load bootstrap3 %}
+{% block title %}Контакты{% endblock %}
+{% block page %}
+    <h1>Контакты</h1>
+    <article>
+    {% if contact_form %}
+        <p>Добро пожаловать на сайт.</p>
+        <p>Если у Вас есть пожелания или предложения по улучшению сайта, либо Вы желаете предложить статью к публикации на сайте, то Вы можете сделать это, воспользовавшись контактной формой:</p>
+        <form id="contact_form" action="{% url 'home:contacts' %}" method="post">
+            {% csrf_token %}
+            {% bootstrap_form contact_form %}
+            {% buttons %}
+                <button type="submit" class="btn btn-primary">{% bootstrap_icon "send" %}&nbsp;&nbsp;Отправить</button>
+            {% endbuttons %}
+        </form>
+    {% else %}
+        <p>Сообщение отправлено</p>
+    {% endif %}
+    </article>
+{% endblock %}

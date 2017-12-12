@@ -1,0 +1,13 @@
+{% load popular_news %}
+{% get_popular_articles_for_week as POPULAR_ARTICLES %}
+{% if POPULAR_ARTICLES %}
+    {% load bootstrap3 %}
+    <ul class="list-group">
+        <li class="list-group-item active"><strong>Популярные публикации за неделю</strong></li>
+        {% for article in POPULAR_ARTICLES %}
+            <li class="list-group-item">
+                <a href="{% url 'news:article' article.article__article_section__section_title article.article_id %}">{{ article.article__article_name }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}

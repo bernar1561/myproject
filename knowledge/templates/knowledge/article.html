@@ -1,0 +1,107 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% load bootstrap3 %}
+{% block page %}
+    <div class="col-md-8">
+        <h1 style=" margin-top: 0px !important;">{{ article.article_name }}</h1>
+        <p>{{ article.article_content|safe }}</p>
+        <p>
+            <a href="http://vk.com/share.php?url=https://hitparad.kz{{ article.get_absolute_url }}" target="_blank" rel="nofollow">
+                {{ article.article_name }}
+                <img src="{% static 'images/social/vk.png' %}">
+            </a>
+            <a href="https://twitter.com/share?url=https://hitparad.kz{{ article.get_absolute_url }}"
+               target="_blank" rel="nofollow">
+                {{ article.article_name }}
+                <img src="{% static 'images/social/twitter.png' %}">
+            </a>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=https://hitparad.kz{{ article.get_absolute_url }}"
+               target="_blank" rel="nofollow">
+                {{ article.article_name }}
+                <img src="{% static 'images/social/facebook.png' %}">
+            </a>
+            <a href="https://plus.google.com/share?url=https://hitparad.kz{{ article.get_absolute_url }}"
+               target="_blank" rel="nofollow">
+                {{ article.article_name }}
+                <img src="{% static 'images/social/google-plus.png' %}">
+            </a>
+            <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://hitparad.kz{{ article.get_absolute_url }}"
+               target="_blank" rel="nofollow">
+                {{ article.article_name }}
+                <img src="{% static 'images/social/linkedin.png' %}">
+            </a>
+        </p>
+    </div>
+    <div class="col-md-4">
+        {% if popular_list %}{% load bootstrap3 %}
+            <ul class="list-group">
+            <li class="list-group-item active"><strong>Популярные публикации за неделю</strong></li>
+            {% for pop_article in popular_list %}
+                <li class="list-group-item">
+                <a href="{% url 'news:article' pop_article.article__article_section__section_title pop_article.article_id %}">{{ pop_article.article__article_name }}</a>
+                </li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+    <div class="col-md-12">
+        <h2>Комментарии</h2>
+        {% for comment in comments %}
+            <a name="comment-{{ comment.id }}"></a>
+            <div class="row" id="{{ comment.id }}">
+                <div class="col-md-{{ comment.get_col }} col-md-offset-{{ comment.get_offset }}">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <strong>{{ comment.author_id.get_full_name|default:comment.author_id.username }}</strong>&nbsp;&nbsp;
+                            {{ comment.pub_date }}
+                            <a href="#comment-{{ comment.id }}">#</a>
+                        </div>
+                        <div class="panel-body">
+                            <div>{{ comment.content|safe }}</div>
+                            {% if form %}<a class="btn btn-default btn-xs pull-right"
+                                            onclick="return show_comments_form({{ comment.id }})">
+                                {% bootstrap_icon "share-alt" %}&nbsp;&nbsp;Ответить</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        {% if form %}
+            <h3 id="write_comment"><a onclick="return show_comments_form('write_comment')">Написать комментарий</a></h3>
+            <form id="comment_form" action="" method="post">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+            {% buttons %}
+                <button type="submit" class="btn btn-primary">{% bootstrap_icon "comment" %}&nbsp;&nbsp;Комментировать</button>
+            {% endbuttons %}
+            </form>
+        {% else %}
+            <div class="panel panel-warning">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Комментарии</h3>
+                </div>
+                <div class="panel-body">
+                    Только авторизованные пользователи могут оставлять комментарии.<br/>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock %}
+
+{% block script %}
+    <script>
+        function show_comments_form(parent_comment_id) {
+            if (parent_comment_id == 'write_comment')
+            {
+                $("#id_parent_comment").val('')
+            }
+            else
+            {
+                $("#id_parent_comment").val(parent_comment_id);
+            }
+            $("#comment_form").insertAfter("#" + parent_comment_id);
+        }
+    </script>
+{% endblock %}
