@@ -33,14 +33,14 @@
                     </div>
                 </form>
             </ul>
-            {% block content %}
-            {% endblock %}
+
         </div>
     </div>
 </div>
 <br><br><br><br><br>
 <div class="container">
     <div class="row">
+    {% block content %}{% endblock %}
 {#{% block content %}#}
     {% block page %}
     {% endblock page %}
