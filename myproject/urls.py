@@ -20,8 +20,11 @@ from django.contrib.sitemaps import views as sitemap_views      # Предста
 from django.contrib.sitemaps import GenericSitemap              # Шаблонный класс для формирования страницы Sitemap
 from django.views.decorators.cache import cache_page            # Декоратор кеширования
 from knowledge import models as knowledge_models                # Модели статей и разделов, по которым будет формироваться Sitemap
-from home.sitemap import HomeSitemap                            # Статический Sitemap для относительно постоянных страниц
-from accounts.views import ELoginView                           # Представление для авторизации из модуля accounts
+from home.sitemap import HomeSitemap
+from django.conf.urls.static import static
+from django.conf import settings
+# Статический Sitemap для относительно постоянных страниц
+from account.views import ELoginView                           # Представление для авторизации из модуля account
 
 # Чтобы перехватить страницу авторизации, необходимо
 # прописан путь к этой странице перед url админ-панели
@@ -53,11 +56,16 @@ sitemaps = {
 urlpatterns = [
     url(r'^', include('home.urls', namespace='home')),
     url(r'^news/', include('knowledge.urls', namespace='news')),
+
+    # url(r'^admin/login/', ELoginView.as_view()),
     url(r'^admin/', admin.site.urls),
-    url(r'^admin/login/', ELoginView.as_view()),
-    url(r'^accounts/', include('accounts.urls')),    # также добавим url модуля авторизаций
+    url(r'^account/', include('account.urls')),    # также добавим url модуля авторизаций
     url(r'^search/', include('search.urls', namespace='search')),
-]
+
+] \
+              + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)\
+              + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
 
 
 # Шаблоны URL, заметьте, здесь указано кеширование cache_page(86400)

@@ -1,4 +1,5 @@
 {% block head %}
+{#    <title>{% block title %}{% endblock %}</title>#}
     {% load bootstrap3 %}
     <script src="{% bootstrap_jquery_url %}"></script>
     {% bootstrap_javascript %}
@@ -6,7 +7,7 @@
     <link rel="home" type="application/rss+xml" href="http://example.com/feed" />
 {% endblock %}
 <body>
-<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation" style="top: 22px !important;">
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -15,25 +16,38 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Project name</a>
+            <a class="navbar-brand" href="{% url 'home:index' %}">Project name</a>
         </div>
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Home</a></li>
+                <li class="active"><a href="{% url 'home:index' %}">Home</a></li>
                 <li><a href="#about">About</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <form action="{% url 'search:index' %}" class="navbar-form navbar-left" method="get">
-                    <div class="input-group">
-                        <input id="search" name="q" type="text" class="form-control" placeholder="Поиск">
-                        <span class="input-group-btn">
-                            <button type="submit" class="btn btn-default">{% bootstrap_icon 'search' %}</button>
-                        </span>
-                    </div>
-                </form>
+                <li>
+                    <form action="{% url 'search:index' %}" class="navbar-form navbar-left" method="get">
+                        <div class="input-group">
+                            <input id="search" name="q" type="text" class="form-control" placeholder="Поиск">
+                            <span class="input-group-btn">
+                                <button type="submit" class="btn btn-default" style="font-size: 13px!important; padding: 10px 12px !important;">{% bootstrap_icon 'search' %}</button>
+                            </span>
+                        </div>
+                    </form>
+                </li>
+                <li>
+                    {% if request.user.is_authenticated %}
+                    <a href="">
+                        {{ request.user.username }}
+                    </a>
+                </li>
+                <li>
+                    <button class="btn btn-success" type="button"  onclick="location.href='{% url "logout" %}'" style="margin-top: 8px;">Выход</button>
+                    {% else %}
+                        <button class="btn btn-success" type="button" onclick="location.href='{% url "login" %}'" style="margin-top: 8px;">Вход</button>
+                    {% endif %}
+                </li>
             </ul>
-
         </div>
     </div>
 </div>
@@ -53,5 +67,4 @@
 </div>
 {% block footer %}
 {% endblock %}
-
 </body>

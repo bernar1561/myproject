@@ -1,0 +1,42 @@
+{% extends "home/base.html" %}
+
+{% block title %}Регистрация аккаунта{% endblock %}
+
+{% block content %}
+    <div class="content">
+        <div class="col-md-offset-3 col-md-6 voffset-60">
+            <h1 style="text-align: center !important;">Регистрация</h1>
+            <p>Пожалуйста, зарегистрируйтесь, используя следующую форму:</p>
+        </div>
+        <div class="col-md-4 col-xs-10">
+            <form class="form-horizontal" action="." method="post" >
+                <div class="form-group" style="text-align: center !important;">
+                    <label class="sr-only" id="id_username" for="inputEmail">Имя пользователя</label>
+                    <input type="text" class="form-control" name="username" id="id_username" maxlength="254" placeholder="Имя пользователя">
+                    <span class="helptext">Обязательное поле. Не более 150 символов. Только буквы, цифры и символы @/./+/-/_.</span>
+                </div>
+                <div class="form-group" style="text-align: center !important;">
+                    <label class="sr-only" id="id_first_name" for="inputEmail">Имя</label>
+                    <input type="text" class="form-control" name="first_name" id="id_first_name" maxlength="254" placeholder="Имя">
+                </div>
+                <div class="form-group" style="text-align: center !important;">
+                    <label class="sr-only" id="id_email" for="inputEmail">Email</label>
+                    <input type="email" class="form-control" name="email" id="id_email" maxlength="254" placeholder="Email">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Пароль</label>
+                    <input type="password" name="password" id="id_password" class="form-control" placeholder="Пароль">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Повторите пароль</label>
+                    <input type="password" name="password2" id="id_password2" class="form-control" placeholder="Повторите пароль">
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Создай мой аккаунт</button>
+                </div>
+
+{#                {{ user_form.as_p }}#}
+                {% csrf_token %}
+            </form>
+        </div>
+{% endblock %}

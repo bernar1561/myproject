@@ -13,7 +13,7 @@ class SearchView(View):
 
         question = request.GET.get('q')
         if question is not None:
-            search_articles = Article.objects.filter(article_name__search=question)
+            search_articles = Article.objects.filter(article_name__icontains=question)
 
             # формируем строку URL, которая будет содержать последний запрос
             # Это важно для корректной работы пагинации
