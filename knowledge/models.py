@@ -47,6 +47,8 @@ class Article(models.Model):
 
 class Comment(models.Model):
     class Meta:
+        verbose_name = 'Коментарий'
+        verbose_name_plural = 'Коментарии'
         db_table = 'comments'
 
     path = ArrayField(models.IntegerField())
@@ -73,6 +75,8 @@ class Comment(models.Model):
 
 class ArticleStatistic(models.Model):
     class Meta:
+        verbose_name = 'Статистика просмотров'
+        verbose_name_plural = 'Статистики просмотров'
         db_table = "ArticleStatistic"
 
     # внешний ключ на статью

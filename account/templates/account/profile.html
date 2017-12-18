@@ -1,0 +1,21 @@
+{% extends "home/base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+    <h1>Dashboard</h1>
+    {% for user in profile %}
+        {{ user.username }}
+        {{ user.first_name }}
+        {{ user.profile.status }}
+        {{ user.profile.avatar.url }}
+        {{ user.profile.vk_link }}
+
+{#            {{ profil.status }}#}
+{#        {% endfor %}#}
+{#        <h4>{{ user.username }} - {{ user.profile }}</h4>#}
+{#       <h4>{{ user.profile.avatar.url }}</h4>#}
+
+    {% endfor %}
+    <p>Добро пожаловать на панель инструментов. Вы можете <a href="{% url "edit" %}">изменить свой профиль</a> или <a href="{% url "password_change" %}">изменить свой пароль</a>.</p>
+{% endblock %}

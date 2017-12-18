@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from .manager import *
 
 
 class Profile(models.Model):
@@ -8,12 +9,15 @@ class Profile(models.Model):
         verbose_name_plural = 'Профили'
 
     user = models.OneToOneField(settings.AUTH_USER_MODEL)
+    status = models.IntegerField(verbose_name='статус', default=None, blank=True)
     date_of_birth = models.DateField(blank=True, null=True)
-    avatar = models.ImageField(upload_to='users/%Y/%m/%d', blank=True)
-    vk_link = models.URLField(verbose_name='ссылка на Vk')
-    fb_link = models.URLField(verbose_name='ссылка на facebook')
-    twitter_link = models.URLField(verbose_name='ссылка на twitter')
-    inst_link = models.URLField(verbose_name='ссылка на instagram')
+    avatar = models.ImageField(verbose_name='аватар', upload_to='users/%Y/%m/%d', default=None, blank=True)
+    vk_link = models.URLField(verbose_name='ссылка на Vk', default=None, blank=True)
+    fb_link = models.URLField(verbose_name='ссылка на facebook', default=None, blank=True)
+    twitter_link = models.URLField(verbose_name='ссылка на twitter', default=None, blank=True)
+    inst_link = models.URLField(verbose_name='ссылка на instagram', default=None, blank=True)
+    objects = ProfileManager()
+    # user_status = ProfileStatusManager()
 
     def __str__(self):
         return 'Профиль для пользователя {}'.format(self.user.username)

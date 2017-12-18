@@ -8,7 +8,13 @@ from .special_func import get_next_url
 from django.contrib.auth.views import logout
 from django.views.generic.edit import FormView
 from django.contrib.auth.forms import UserCreationForm
-from .forms import LoginForm, UserRegistrationForm
+from .forms import LoginForm, UserRegistrationForm, UserEditForm, ProfileEditForm
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+
+@login_required
+def dashboard(request):
+    return render(request, 'account/dashboard.html', {'section': 'dashboard'})
 
 
 def logout_view(request):
@@ -95,3 +101,51 @@ def register(request):
 #
 #         # Вызываем метод базового класса
 #         return super(RegisterFormView, self).form_valid(form)
+
+# class EditProfileView(ListView):
+
+
+class EditProfileView(View):
+    template_name = 'account/edit.html'
+    user_form = UserEditForm
+    profile_form = ProfileEditForm
+
+    def get(self, request, *args, **kwargs):
+        context = {}
+        context.update(csrf(request))
+        user = auth.get_user(request)
+        if user.is_authenticated:
+            context['user_form'] = self.user_form
+            context['profile_form'] = self.profile_form
+        return render(request, template_name=self.template_name, context=context)
+
+    def post(self, request, *args, **kwargs):
+        if request.method == 'POST':
+            user_form = UserEditForm(instance=request.user, data=request.POST)
+            profile_form = ProfileEditForm(instance=request.user.profile, data=request.POST, files=request.FILES)
+            if user_form.is_valid() and profile_form.is_valid():
+                user_form.save()
+                profile_form.save()
+
+                return redirect('profile')
+
+        # else:
+        #     user_form = UserEditForm(instance=request.user)
+        #     profile_form = ProfileEditForm(instance=request.user.profile)
+        #     return render(request,
+        #                   'account/edit.html',
+        #                   {'user_form': user_form,
+        #                    'profile_form': profile_form})
+
+
+class ProfileView(View):
+    template_name = 'account/profile.html'
+
+    def get(self, request, *args, **kwargs):
+        context = {}
+        context.update(csrf(request))
+        a = User.objects.filter(username=auth.get_user(request))
+        for i in a:
+            print(i)
+        context['profile'] = User.objects.filter(username=auth.get_user(request))
+        return render(request, template_name=self.template_name, context=context)
